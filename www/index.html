@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width" />
+    <title>Modular Ionic Example</title>
+    <link href="components/all.css" rel="stylesheet" />
+</head>
+<body class="all" ng-app="all">
+    <ion-nav-bar align-title="left" class="bar-positive">
+        <ion-nav-title>Modular</ion-nav-title>
+        <ion-nav-buttons side="secondary">
+            <button class="button button-clear icon-right ion-chevron-right" ui-sref="submit" nav-direction="forward">Submit</button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-nav-view animation="slide-left-right"></ion-nav-view>
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="cordova.js"></script>
+    <script src="components/all.js"></script>
+    <script src="components/complete/complete.js"></script>
+    <script src="components/create/create.js"></script>
+    <script src="components/edit/edit.js"></script>
+    <script src="components/send/send.js"></script>
+    <script src="components/submit/submit.js"></script>
+    <script src="components/welcome/welcome.js"></script>
+</body>
+</html>
