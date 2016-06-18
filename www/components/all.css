@@ -9815,6 +9815,9 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
+a {
+  text-decoration: none; }
+
 .complete {
   background-color: coral;
   display: flex;
@@ -9826,12 +9829,65 @@ a.button {
 
 .create {
   background-color: #000;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center; }
   .create h2 {
     color: #fff; }
+
+.edit .screen {
+  height: 250px;
+  position: absolute;
+  top: 44px;
+  background-color: #000;
+  width: 100%;
+  left: 0;
+  z-index: 5; }
+  .edit .screen img,
+  .edit .screen video,
+  .edit .screen .rzslider {
+    left: 0;
+    position: absolute;
+    top: 0; }
+  .edit .screen img {
+    pointer-events: none;
+    z-index: 2; }
+  .edit .screen .rzslider {
+    bottom: 0;
+    top: auto;
+    z-index: 3; }
+
+.edit .tab-nav {
+  top: 294px !important; }
+
+.edit .has-screen {
+  top: 342px !important; }
+
+.edit img,
+.edit video {
+  display: block;
+  max-width: 100%; }
+
+.edit .gallery {
+  display: flex;
+  flex-wrap: wrap; }
+  .edit .gallery .gallery-item {
+    box-sizing: border-box;
+    cursor: pointer;
+    padding: 0 5px;
+    width: 33.33%; }
+    .edit .gallery .gallery-item img {
+      border: 2px solid #999; }
+    .edit .gallery .gallery-item.selected img {
+      border-color: red; }
+  .edit .gallery .add {
+    align-items: center;
+    border: 2px solid #999;
+    display: flex;
+    font-size: 2rem;
+    justify-content: center; }
 
 .send {
   background-color: coral;
@@ -9841,6 +9897,11 @@ a.button {
   text-align: center; }
   .send h2 {
     color: #fff; }
+  .send .round-progress-wrapper {
+    opacity: .5; }
+
+.submit .submitted span {
+  color: #ff5555; }
 
 .welcome {
   background-color: coral;

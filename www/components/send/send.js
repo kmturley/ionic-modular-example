@@ -4,7 +4,7 @@
 
 /*globals angular */
 
-angular.module('send', [])
+angular.module('send', ['angular-svg-round-progressbar'])
 
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
         'use strict';
@@ -15,12 +15,19 @@ angular.module('send', [])
         });
     }])
 
-    .controller('Send', ['$scope', '$state', '$timeout', function ($scope, $state, $timeout) {
+    .controller('Send', ['$scope', '$state', '$interval', function ($scope, $state, $interval) {
         'use strict';
 
+        $scope.data.progress = 0;
+
         $scope.$on('$ionicView.enter', function (e) {
-            $timeout(function () {
-                $state.go('complete');
+            var timer = $interval(function () {
+                if ($scope.data.progress < 100) {
+                    $scope.data.progress += Math.random() * 30;
+                } else {
+                    $interval.cancel(timer);
+                    $state.go('complete');
+                }
             }, 1000);
         });
     }]);

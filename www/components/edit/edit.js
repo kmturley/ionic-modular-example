@@ -4,7 +4,7 @@
 
 /*globals angular */
 
-angular.module('edit', [])
+angular.module('edit', ['rzModule'])
 
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
         'use strict';
@@ -12,14 +12,14 @@ angular.module('edit', [])
             .state('edit', {
                 url: '/edit',
                 abstract: true,
-                templateUrl: 'components/edit/edit.html'
+                templateUrl: 'components/edit/edit.html',
+                controller: 'Edit'
             })
             .state('edit.dash', {
                 url: '/dash',
                 views: {
                     'edit-dash': {
-                        templateUrl: 'components/edit/edit-dash.html',
-                        controller: 'DashCtrl'
+                        templateUrl: 'components/edit/edit-dash.html'
                     }
                 }
             })
@@ -27,17 +27,7 @@ angular.module('edit', [])
                 url: '/chats',
                 views: {
                     'edit-chats': {
-                        templateUrl: 'components/edit/edit-chats.html',
-                        controller: 'ChatsCtrl'
-                    }
-                }
-            })
-            .state('edit.chat-detail', {
-                url: '/chats/:chatId',
-                views: {
-                    'edit-chats': {
-                        templateUrl: 'components/edit/edit-chat-detail.html',
-                        controller: 'ChatDetailCtrl'
+                        templateUrl: 'components/edit/edit-chats.html'
                     }
                 }
             })
@@ -45,96 +35,80 @@ angular.module('edit', [])
                 url: '/account',
                 views: {
                     'edit-account': {
-                        templateUrl: 'components/edit/edit-account.html',
-                        controller: 'AccountCtrl'
+                        templateUrl: 'components/edit/edit-account.html'
+                    }
+                }
+            })
+            .state('edit.details', {
+                url: '/details',
+                views: {
+                    'edit-account': {
+                        templateUrl: 'components/edit/edit-details.html'
                     }
                 }
             });
     }])
 
-    .controller('DashCtrl', ['$scope', '$state', function ($scope, $state) {
+    .controller('Edit', ['$scope', '$state', function ($scope, $state) {
         'use strict';
-        console.log('DashCtrl');
-    }])
+        console.log('Edit');
 
-    .controller('ChatsCtrl', ['$scope', '$state', 'Chats', function ($scope, $state, Chats) {
-        'use strict';
-        console.log('ChatsCtrl');
-        // With the new view caching in Ionic, Controllers are only called
-        // when they are recreated or on app start, instead of every page change.
-        // To listen for when this page is active (for example, to refresh data),
-        // listen for the $ionicView.enter event:
-        //
-        //$scope.$on('$ionicView.enter', function(e) {
-        //});
-
-        $scope.chats = Chats.all();
-        $scope.remove = function (chat) {
-            Chats.remove(chat);
-        };
-    }])
-
-    .controller('ChatDetailCtrl', ['$scope', '$state', 'Chats', '$stateParams', function ($scope, $state, Chats, $stateParams) {
-        'use strict';
-        console.log('ChatDetailCtrl');
-        $scope.chat = Chats.get($stateParams.chatId);
-    }])
-
-    .controller('AccountCtrl', ['$scope', '$state', function ($scope, $state) {
-        'use strict';
-        console.log('AccountCtrl');
-        $scope.settings = {
-            enableFriends: true
-        };
-    }])
-
-    .factory('Chats', [function () {
-        'use strict';
-        // Might use a resource here that returns a JSON array
-
-        // Some fake testing data
-        var chats = [{
-            id: 0,
-            name: 'Ben Sparrow',
-            lastText: 'You on your way?',
-            face: 'img/ben.png'
-        }, {
-            id: 1,
-            name: 'Max Lynx',
-            lastText: 'Hey, it\'s me',
-            face: 'img/max.png'
-        }, {
-            id: 2,
-            name: 'Adam Bradleyson',
-            lastText: 'I should buy a boat',
-            face: 'img/adam.jpg'
-        }, {
-            id: 3,
-            name: 'Perry Governor',
-            lastText: 'Look at my mukluks!',
-            face: 'img/perry.png'
-        }, {
-            id: 4,
-            name: 'Mike Harrington',
-            lastText: 'This is wicked good ice cream.',
-            face: 'img/mike.png'
-        }];
-
-        return {
-            all: function () {
-                return chats;
-            },
-            remove: function (chat) {
-                chats.splice(chats.indexOf(chat), 1);
-            },
-            get: function (chatId) {
-                var i = 0;
-                for (i = 0; i < chats.length; i += 1) {
-                    if (chats[i].id === parseInt(chatId, 10)) {
-                        return chats[i];
-                    }
-                }
-                return null;
+        $scope.toggleImage = function (image) {
+            if ($scope.data.image === image) {
+                $scope.data.image = null;
+            } else {
+                $scope.data.image = image;
             }
         };
-    }]);
+
+        $scope.toggleVideo = function (video) {
+            if ($scope.data.video === video) {
+                $scope.data.video = null;
+            } else {
+                $scope.data.video = video;
+            }
+        };
+
+        $scope.loadGallery = function () {
+            if (!navigator.camera) { return; }
+            navigator.device.getPicture(function (files) {
+                console.log('loadGallery.success', files);
+                $scope.data.addVideo({ "img": "assets/example.png", "url": "assets/example.mp4" });
+            }, function (e) {
+                console.log('loadGallery.error', e);
+                $scope.data.addVideo({ "img": "assets/example.png", "url": "assets/example.mp4" });
+            });
+        };
+
+        $scope.$watch('data.slider.minValue', function (val) {
+            console.log('minValue', val);
+        });
+
+        $scope.$watch('data.slider.maxValue', function (val) {
+            console.log('maxValue', val);
+        });
+
+        $scope.loadGallery();
+    }])
+
+    .directive('video', function() {
+        return {
+            restrict: 'E',
+            link: function (scope, element, attrs) {
+                scope.$watch(attrs.vgSrc, function (video) {
+                    if (video) {
+                        element.attr('poster', video.img);
+                        element[0].load(video.src);
+                    }
+                });
+
+                scope.toggle = function () {
+                    if (element[0].paused === true) {
+                        element[0].play();
+                    } else {
+                        element[0].pause();
+                    }
+                };
+            }
+        }
+    });
