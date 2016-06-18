@@ -1,21 +1,28 @@
 <ion-view>
     <ion-nav-buttons side="secondary">
-        <button class="button button-clear icon-right ion-chevron-right" ui-sref="send" nav-direction="forward">Send</button>
+        <button type="submit" class="button button-clear icon-right ion-android-arrow-dropright-circle" ng-click="validate($event)">Send</button>
     </ion-nav-buttons>
     <ion-content class="padding submit">
-        <div class="list">
+        <form name="$parent.form" action="#" ng-submit="send()" ng-class="{'submitted':submitted}">
             <label class="item item-input item-stacked-label">
-                <span class="input-label">First Name</span>
-                <input type="text" placeholder="John" />
+                <span class="input-label">First Name *</span>
+                <input type="text" ng-model="data.first" placeholder="John" required />
             </label>
             <label class="item item-input item-stacked-label">
-                <span class="input-label">Last Name</span>
-                <input type="text" placeholder="Suhr" />
+                <span class="input-label">Last Name *</span>
+                <input type="text" ng-model="data.last" placeholder="Suhr" required />
             </label>
             <label class="item item-input item-stacked-label">
-                <span class="input-label">Email</span>
-                <input type="email" placeholder="john@suhr.com" />
+                <span class="input-label">Email *</span>
+                <input type="email" ng-model="data.email" placeholder="john@suhr.com" required />
             </label>
-        </div>
+            <div ng-hide="data.account">
+                <p>Login to show options</p>
+                <button class="button button-positive" ng-click="login()">Login</button>
+            </div>
+            <div ng-show="data.account">
+                {{ data.account }}
+            </div>
+        </form>
     </ion-content>
 </ion-view>
